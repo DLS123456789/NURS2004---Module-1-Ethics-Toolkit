@@ -1,0 +1,1977 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 1 Toolkit | NURS2004</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;700;800&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  :root {
+    --bg: #faf8f4;
+    --paper: #ffffff;
+    --sage: #6b8e7f;
+    --sage-deep: #4f6b5f;
+    --sage-light: #e3ede7;
+    --coral: #e8836a;
+    --coral-deep: #c95a3f;
+    --coral-light: #fbe3da;
+    --gold: #d4a44b;
+    --gold-light: #f7eccd;
+    --rose: #c97b9a;
+    --rose-light: #f3d9e3;
+    --ink: #2b2a26;
+    --ink-soft: #5a574f;
+    --muted: #8b8779;
+    --line: #e8e2d4;
+  }
+
+  html, body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    line-height: 1.55;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 10% 5%, rgba(107, 142, 127, 0.07), transparent 50%),
+      radial-gradient(ellipse at 90% 95%, rgba(232, 131, 106, 0.07), transparent 50%);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 16px; }
+
+  /* HUD */
+  .hud {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 18px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 10px;
+    box-shadow: 0 4px 16px rgba(43, 42, 38, 0.05);
+  }
+
+  .hud-brand { display: flex; align-items: center; gap: 10px; }
+
+  .brand-mark {
+    width: 36px;
+    height: 36px;
+    background: var(--coral);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    font-size: 0.95rem;
+    box-shadow: 0 2px 0 var(--coral-deep);
+  }
+
+  .brand-text { line-height: 1.1; }
+  .brand-title { font-family: 'Fraunces', serif; font-weight: 700; font-size: 1.05rem; color: var(--ink); }
+  .brand-sub { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; font-weight: 600; }
+
+  .module-pill {
+    background: var(--sage);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .progress-pill {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    padding: 6px 12px;
+    background: var(--coral-light);
+    color: var(--coral-deep);
+    border-radius: 8px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  /* Layout */
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 18px;
+  }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .toolkit-panel { order: 2; }
+  }
+
+  /* Screens */
+  .screen {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 28px;
+    box-shadow: 0 6px 24px rgba(43, 42, 38, 0.05);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hidden { display: none !important; }
+
+  .intro-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--coral);
+    font-size: 0.72rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .intro-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    font-size: clamp(2rem, 6vw, 2.8rem);
+    color: var(--ink);
+    line-height: 1.05;
+    margin-bottom: 10px;
+  }
+
+  .intro-title .accent { color: var(--coral); font-style: italic; }
+
+  .intro-sub { color: var(--ink-soft); font-size: 1rem; margin-bottom: 22px; }
+
+  .module-banner {
+    background: linear-gradient(135deg, var(--sage), var(--sage-deep));
+    color: white;
+    padding: 14px 18px;
+    border-radius: 14px;
+    margin-bottom: 18px;
+  }
+
+  .module-banner-label { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; opacity: 0.8; letter-spacing: 3px; font-weight: 700; margin-bottom: 4px; }
+  .module-banner-title { font-family: 'Fraunces', serif; font-weight: 700; font-size: 1.2rem; }
+
+  .how-it-works {
+    background: var(--sage-light);
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 22px;
+  }
+
+  .how-it-works h3 { font-family: 'Fraunces', serif; font-weight: 700; color: var(--sage-deep); font-size: 1rem; margin-bottom: 10px; }
+
+  .how-it-works ol { list-style: none; counter-reset: how; padding: 0; }
+
+  .how-it-works li {
+    counter-increment: how;
+    padding-left: 32px;
+    position: relative;
+    margin-bottom: 8px;
+    color: var(--ink);
+    font-size: 0.92rem;
+  }
+
+  .how-it-works li::before {
+    content: counter(how);
+    position: absolute;
+    left: 0;
+    top: 1px;
+    width: 22px;
+    height: 22px;
+    background: var(--coral);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 0.72rem;
+  }
+
+  /* Buttons */
+  .btn {
+    background: var(--coral);
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 12px;
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 0 var(--coral-deep);
+  }
+
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 0 var(--coral-deep); }
+  .btn:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--coral-deep); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  .btn-full { width: 100%; }
+  .btn-sage { background: var(--sage); box-shadow: 0 4px 0 var(--sage-deep); }
+  .btn-sage:hover { box-shadow: 0 6px 0 var(--sage-deep); }
+  .btn-sage:active { box-shadow: 0 2px 0 var(--sage-deep); }
+
+  .btn-ghost { background: var(--paper); color: var(--ink); border: 2px solid var(--line); box-shadow: 0 4px 0 var(--line); }
+  .btn-ghost:hover { border-color: var(--ink); box-shadow: 0 6px 0 var(--line); }
+
+  /* Step header */
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 8px;
+    padding-bottom: 16px;
+    border-bottom: 2px dashed var(--line);
+  }
+
+  .step-num {
+    width: 48px;
+    height: 48px;
+    background: var(--coral-light);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .step-num-big { font-family: 'Fraunces', serif; font-weight: 800; color: var(--coral-deep); font-size: 1.3rem; line-height: 1; }
+  .step-num-of { font-family: 'JetBrains Mono', monospace; color: var(--muted); font-size: 0.55rem; margin-top: 1px; }
+
+  .step-info { flex: 1; }
+  .step-tag { font-family: 'JetBrains Mono', monospace; color: var(--muted); font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; }
+  .step-title { font-family: 'Fraunces', serif; font-weight: 700; color: var(--ink); font-size: 1.25rem; margin-top: 2px; }
+
+  .step-type-tag {
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--gold-light);
+    color: var(--ink);
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 0.6rem;
+    letter-spacing: 1px;
+    font-weight: 700;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+
+  .step-type-tag.game { background: var(--coral); color: white; }
+
+  .step-progress { width: 80px; height: 5px; background: var(--line); border-radius: 3px; overflow: hidden; flex-shrink: 0; }
+  .step-progress-fill { height: 100%; background: var(--coral); transition: width 0.4s ease; }
+
+  .step-prompt {
+    background: var(--sage-light);
+    border-left: 4px solid var(--sage);
+    padding: 14px 18px;
+    border-radius: 0 12px 12px 0;
+    margin: 18px 0;
+    color: var(--ink);
+    font-size: 0.93rem;
+  }
+
+  .step-prompt strong { color: var(--sage-deep); }
+
+  /* ===== ACTIVITY: BUCKET SORT ===== */
+  .sort-buckets-area {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 14px 0;
+  }
+
+  @media (max-width: 600px) {
+    .sort-buckets-area { grid-template-columns: 1fr; }
+  }
+
+  .sort-bucket {
+    background: var(--paper);
+    border: 2px dashed var(--line);
+    border-radius: 12px;
+    padding: 12px;
+    min-height: 130px;
+  }
+
+  .sort-bucket-header { font-family: 'Fraunces', serif; font-weight: 700; color: var(--ink); font-size: 0.95rem; margin-bottom: 4px; text-align: center; }
+  .sort-bucket-sub { font-size: 0.7rem; color: var(--muted); text-align: center; margin-bottom: 10px; font-style: italic; }
+  .sort-bucket-items { display: flex; flex-direction: column; gap: 6px; }
+
+  .sort-bucket.law { border-color: var(--rose); background: var(--rose-light); }
+  .sort-bucket.ethics { border-color: var(--sage); background: var(--sage-light); }
+  .sort-bucket.both { border-color: var(--gold); background: var(--gold-light); }
+
+  .sort-bucket-item-placed {
+    background: var(--paper);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 0.82rem;
+    border: 1px solid var(--line);
+  }
+
+  .sort-bucket-item-placed.correct { border-color: var(--sage); background: var(--sage-light); }
+  .sort-bucket-item-placed.wrong { border-color: var(--coral); background: var(--coral-light); }
+
+  .sort-pool { background: var(--bg); border-radius: 12px; padding: 14px; }
+  .sort-pool-label { font-family: 'JetBrains Mono', monospace; color: var(--muted); font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase; font-weight: 600; margin-bottom: 8px; }
+  .sort-pool-items { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .sort-item {
+    background: var(--paper);
+    border: 2px solid var(--line);
+    color: var(--ink);
+    padding: 8px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.15s;
+    user-select: none;
+  }
+
+  .sort-item:hover { border-color: var(--coral); transform: translateY(-2px); }
+  .sort-item.selected { border-color: var(--coral); background: var(--coral-light); box-shadow: 0 0 0 3px var(--coral-light); }
+  .sort-item.used { opacity: 0.3; pointer-events: none; }
+
+  /* ===== ACTIVITY: PICK THE WRONG ONE ===== */
+  .statement-list { display: flex; flex-direction: column; gap: 10px; }
+
+  .statement {
+    background: var(--paper);
+    border: 2px solid var(--line);
+    color: var(--ink);
+    padding: 14px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    text-align: left;
+    font-size: 0.92rem;
+    transition: all 0.15s;
+    line-height: 1.4;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .statement:hover { border-color: var(--coral); background: var(--coral-light); }
+  .statement.correct { border-color: var(--sage); background: var(--sage-light); }
+  .statement.wrong-pick { border-color: var(--coral); background: var(--coral-light); }
+  .statement.disabled { cursor: default; }
+
+  .statement-letter {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    background: var(--sage-light);
+    color: var(--sage-deep);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 0.78rem;
+  }
+
+  /* ===== ACTIVITY: BRANCHING SCENARIO ===== */
+  .scenario-panel {
+    background: var(--paper);
+    border: 2px solid var(--rose);
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+  }
+
+  .scenario-tag {
+    display: inline-block;
+    background: var(--rose);
+    color: white;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .scenario-text { color: var(--ink); font-size: 0.95rem; line-height: 1.6; margin-bottom: 12px; }
+  .scenario-text em { color: var(--coral-deep); font-style: italic; }
+
+  .scenario-question {
+    background: var(--rose-light);
+    border-left: 4px solid var(--rose);
+    padding: 12px 16px;
+    border-radius: 0 10px 10px 0;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--ink);
+  }
+
+  .scenario-options { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+
+  .scenario-option {
+    background: var(--paper);
+    border: 2px solid var(--line);
+    color: var(--ink);
+    padding: 12px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: left;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    transition: all 0.15s;
+    line-height: 1.4;
+  }
+
+  .scenario-option:hover { border-color: var(--coral); background: var(--coral-light); transform: translateX(3px); }
+  .scenario-option.chosen { border-color: var(--coral); background: var(--coral-light); }
+  .scenario-option.faded { opacity: 0.4; }
+  .scenario-option:disabled { cursor: default; }
+
+  /* ===== ACTIVITY: FILL THE BLANK ===== */
+  .fill-text {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--ink);
+  }
+
+  .blank {
+    display: inline-block;
+    min-width: 90px;
+    background: var(--coral-light);
+    border: 2px dashed var(--coral);
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-weight: 700;
+    color: var(--coral-deep);
+    text-align: center;
+    margin: 0 2px;
+    cursor: pointer;
+  }
+
+  .blank.filled { background: var(--sage-light); border-color: var(--sage); border-style: solid; color: var(--sage-deep); }
+
+  .word-bank { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+
+  .word-chip {
+    background: var(--paper);
+    border: 2px solid var(--sage);
+    color: var(--sage-deep);
+    padding: 7px 13px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.88rem;
+    font-weight: 600;
+    transition: all 0.15s;
+  }
+
+  .word-chip:hover { background: var(--sage); color: white; transform: translateY(-2px); }
+  .word-chip.used { opacity: 0.35; pointer-events: none; text-decoration: line-through; }
+
+  /* ===== ACTIVITY: TWO COLUMN SORT (deontological vs teleological) ===== */
+  .two-col-sort {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 12px 0;
+  }
+
+  @media (max-width: 500px) {
+    .two-col-sort { grid-template-columns: 1fr; }
+  }
+
+  .col-bucket {
+    background: var(--paper);
+    border: 2px dashed var(--line);
+    border-radius: 12px;
+    padding: 14px;
+    min-height: 150px;
+  }
+
+  .col-bucket.deon { border-color: var(--rose); background: var(--rose-light); }
+  .col-bucket.tele { border-color: var(--gold); background: var(--gold-light); }
+
+  .col-bucket-name { font-family: 'Fraunces', serif; font-weight: 800; color: var(--ink); font-size: 1rem; text-align: center; margin-bottom: 3px; }
+  .col-bucket-tagline { font-size: 0.72rem; color: var(--ink-soft); text-align: center; margin-bottom: 12px; font-style: italic; }
+  .col-bucket-items { display: flex; flex-direction: column; gap: 6px; }
+
+  /* ===== ACTIVITY: MATCH PRINCIPLES TO EXAMPLES ===== */
+  .match-area {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  @media (max-width: 500px) {
+    .match-area { grid-template-columns: 1fr; }
+  }
+
+  .match-column-title { font-family: 'Fraunces', serif; font-weight: 700; color: var(--coral-deep); font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px dashed var(--line); }
+  .match-list { display: flex; flex-direction: column; gap: 8px; }
+
+  .match-item {
+    background: var(--paper);
+    border: 2px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 0.85rem;
+  }
+
+  .match-item.principle { background: var(--coral-light); border-color: var(--coral); color: var(--coral-deep); font-weight: 600; text-align: center; }
+  .match-item:hover { transform: translateX(3px); }
+  .match-item.selected { box-shadow: 0 0 0 3px var(--coral-light); }
+  .match-item.matched { background: var(--sage-light); border-color: var(--sage); cursor: default; opacity: 0.6; }
+
+  /* ===== ACTIVITY: MORAL COMPASS GAME ===== */
+  .compass-game {
+    background: var(--paper);
+    border-radius: 14px;
+    border: 2px solid var(--line);
+    padding: 18px;
+    margin-bottom: 14px;
+  }
+
+  .compass-q-counter {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--coral);
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    text-align: center;
+  }
+
+  .compass-q-title { font-family: 'Fraunces', serif; font-weight: 700; color: var(--ink); font-size: 1.2rem; text-align: center; margin-bottom: 16px; line-height: 1.3; }
+
+  .compass-dial-wrap { display: flex; justify-content: center; margin: 16px 0; }
+
+  .compass-dial {
+    position: relative;
+    width: 100%;
+    max-width: 320px;
+    aspect-ratio: 1;
+    user-select: none;
+    touch-action: none;
+  }
+
+  .compass-dial svg { width: 100%; height: 100%; cursor: grab; }
+  .compass-dial.dragging svg { cursor: grabbing; }
+
+  .compass-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+
+  .compass-label-left { color: var(--rose); }
+  .compass-label-right { color: var(--sage); }
+
+  .compass-reading {
+    background: var(--bg);
+    border-radius: 12px;
+    padding: 12px;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  .compass-reading-val {
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    font-size: 1.4rem;
+    color: var(--coral);
+  }
+
+  .compass-reading-label {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--muted);
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .compass-feedback {
+    background: var(--sage-light);
+    border-left: 4px solid var(--sage);
+    padding: 12px 16px;
+    border-radius: 0 10px 10px 0;
+    margin-top: 14px;
+    animation: slideIn 0.4s ease;
+  }
+
+  .compass-feedback-tag {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--sage-deep);
+    font-size: 0.65rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .compass-feedback-text { color: var(--ink); font-size: 0.88rem; line-height: 1.5; }
+  .compass-feedback-text strong { color: var(--sage-deep); }
+
+  /* ===== ACTIVITY: ORDER STEPS ===== */
+  .order-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+
+  .order-item {
+    background: var(--paper);
+    border: 2px solid var(--line);
+    border-radius: 12px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.15s;
+  }
+
+  .order-item-num {
+    width: 28px;
+    height: 28px;
+    background: var(--coral-light);
+    color: var(--coral-deep);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+
+  .order-item.placed .order-item-num { background: var(--sage); color: white; }
+  .order-item-text { flex: 1; font-size: 0.9rem; color: var(--ink); line-height: 1.4; }
+  .order-controls { display: flex; gap: 4px; flex-shrink: 0; }
+
+  .order-btn {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: var(--ink-soft);
+    font-size: 0.8rem;
+  }
+
+  .order-btn:hover { background: var(--coral); color: white; border-color: var(--coral); }
+
+  /* ===== FEEDBACK ===== */
+  .feedback {
+    margin-top: 16px;
+    padding: 16px 18px;
+    background: var(--sage-light);
+    border-left: 4px solid var(--sage);
+    border-radius: 0 12px 12px 0;
+    animation: slideIn 0.4s ease;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-8px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .feedback.error { background: var(--coral-light); border-color: var(--coral); }
+  .feedback-tag {
+    display: inline-block;
+    background: var(--sage);
+    color: white;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .feedback.error .feedback-tag { background: var(--coral); }
+  .feedback-text { color: var(--ink); font-size: 0.92rem; line-height: 1.5; }
+  .feedback-text strong { color: var(--sage-deep); }
+  .feedback.error .feedback-text strong { color: var(--coral-deep); }
+
+  .step-actions { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+
+  /* ===== TOOLKIT PANEL ===== */
+  .toolkit-panel {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 20px;
+    height: fit-content;
+    position: sticky;
+    top: 16px;
+    box-shadow: 0 6px 24px rgba(43, 42, 38, 0.05);
+  }
+
+  .toolkit-header { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 2px dashed var(--line); }
+
+  .toolkit-icon {
+    width: 32px;
+    height: 32px;
+    background: var(--sage-light);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--sage-deep);
+  }
+
+  .toolkit-title { font-family: 'Fraunces', serif; font-weight: 700; color: var(--ink); font-size: 1.05rem; flex: 1; }
+  .toolkit-count { font-family: 'JetBrains Mono', monospace; background: var(--coral); color: white; padding: 3px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; }
+  .toolkit-empty { text-align: center; color: var(--muted); font-style: italic; font-size: 0.85rem; padding: 20px 10px; }
+  .toolkit-cards { display: flex; flex-direction: column; gap: 10px; }
+
+  .toolkit-card {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 12px;
+    animation: cardPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes cardPop {
+    from { transform: scale(0.7); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .toolkit-card-tag { font-family: 'JetBrains Mono', monospace; color: var(--coral); font-size: 0.62rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }
+  .toolkit-card-title { font-family: 'Fraunces', serif; font-weight: 700; color: var(--ink); font-size: 0.88rem; margin-bottom: 4px; }
+  .toolkit-card-text { font-size: 0.78rem; color: var(--ink-soft); line-height: 1.45; }
+
+  /* ===== FINISH ===== */
+  .finish-banner { text-align: center; padding: 16px 0 20px; }
+
+  .finish-icon {
+    width: 70px;
+    height: 70px;
+    background: var(--sage);
+    border-radius: 50%;
+    margin: 0 auto 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2rem;
+    box-shadow: 0 6px 0 var(--sage-deep);
+  }
+
+  .finish-title { font-family: 'Fraunces', serif; font-weight: 800; color: var(--ink); font-size: clamp(1.6rem, 5vw, 2.2rem); margin-bottom: 6px; }
+  .finish-sub { color: var(--ink-soft); font-size: 0.95rem; max-width: 460px; margin: 0 auto; }
+
+  .printable-toolkit {
+    background: var(--paper);
+    border: 2px solid var(--line);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 18px;
+  }
+
+  .printable-header { text-align: center; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 2px solid var(--coral); }
+  .printable-header-title { font-family: 'Fraunces', serif; font-weight: 800; color: var(--ink); font-size: 1.4rem; margin-bottom: 4px; }
+  .printable-header-sub { font-family: 'JetBrains Mono', monospace; color: var(--muted); font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; font-weight: 600; }
+
+  .printable-section { margin-bottom: 16px; }
+  .printable-section-tag { font-family: 'JetBrains Mono', monospace; color: var(--coral); font-size: 0.68rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }
+  .printable-section-title { font-family: 'Fraunces', serif; font-weight: 700; color: var(--ink); font-size: 1rem; margin-bottom: 6px; }
+  .printable-section-text { color: var(--ink); font-size: 0.9rem; line-height: 1.5; }
+
+  .reflection-prompts {
+    background: var(--sage-light);
+    border-left: 4px solid var(--sage);
+    padding: 16px 20px;
+    border-radius: 0 12px 12px 0;
+    margin-bottom: 18px;
+  }
+
+  .reflection-prompts h3 { font-family: 'Fraunces', serif; color: var(--sage-deep); font-size: 1rem; margin-bottom: 8px; }
+  .reflection-prompts p { color: var(--ink); font-size: 0.88rem; margin-bottom: 6px; }
+  .reflection-prompts ul { margin-left: 20px; margin-top: 6px; }
+  .reflection-prompts li { color: var(--ink); font-size: 0.88rem; margin-bottom: 4px; }
+
+  .finish-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .finish-actions .btn { flex: 1; min-width: 140px; }
+
+  .celebrate {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--sage);
+    color: white;
+    padding: 16px 30px;
+    border-radius: 16px;
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    font-size: 1.2rem;
+    z-index: 100;
+    box-shadow: 0 12px 30px rgba(107, 142, 127, 0.4);
+    animation: celebratePop 1.3s ease forwards;
+    pointer-events: none;
+    text-align: center;
+  }
+
+  @keyframes celebratePop {
+    0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+    20% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+    80% { transform: translate(-50%, -80%) scale(1); opacity: 1; }
+    100% { transform: translate(-50%, -120%) scale(0.9); opacity: 0; }
+  }
+
+  @media print {
+    body { background: white; }
+    body::before { display: none; }
+    .container { max-width: 100%; padding: 0; }
+    .hud, .layout > .screen, .toolkit-panel, .finish-banner, .finish-actions, .reflection-prompts { display: none !important; }
+    .printable-toolkit { border: none; box-shadow: none; padding: 0; }
+    #finish-screen { display: block !important; }
+    #finish-screen > *:not(.printable-toolkit) { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="hud">
+    <div class="hud-brand">
+      <div class="brand-mark">1</div>
+      <div class="brand-text">
+        <div class="brand-title">Ethics Toolkit</div>
+        <div class="brand-sub">NURS2004 Learning Activity</div>
+      </div>
+    </div>
+    <div style="display: flex; gap: 8px; align-items: center;">
+      <div class="module-pill">Module 1</div>
+      <div class="progress-pill" id="progress-pill">0 of 8</div>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <div id="intro-screen" class="screen">
+    <div class="intro-eyebrow">Active Learning Activity</div>
+    <h1 class="intro-title">Module 1 <span class="accent">Toolkit</span></h1>
+    <p class="intro-sub">Introduction to Ethics and Ethical Theories in Nursing. Eight challenges, including a moral compass mini game. Build your reference card by card.</p>
+
+    <div class="module-banner">
+      <div class="module-banner-label">// THIS MODULE COVERS</div>
+      <div class="module-banner-title">Law vs Ethics • Theories • Bioethical Principles • Decision Models</div>
+    </div>
+
+    <div class="how-it-works">
+      <h3>How it works</h3>
+      <ol>
+        <li>Work through eight micro activities including a mini game</li>
+        <li>Each one looks different, no two are the same</li>
+        <li>When you complete a step, a toolkit card unlocks for you</li>
+        <li>At the end, save or print your Module 1 toolkit as a study guide</li>
+      </ol>
+    </div>
+
+    <button class="btn btn-full" onclick="startStep(0)">Begin Module 1</button>
+  </div>
+
+  <!-- LAYOUT -->
+  <div id="activity-layout" class="layout hidden">
+    <div class="screen">
+      <div class="step-header">
+        <div class="step-num">
+          <div class="step-num-big" id="step-num">1</div>
+          <div class="step-num-of">/ 8</div>
+        </div>
+        <div class="step-info">
+          <div class="step-tag" id="step-tag">FOUNDATIONS</div>
+          <div class="step-title" id="step-title"></div>
+        </div>
+        <div class="step-type-tag" id="step-type-tag">SORT</div>
+        <div class="step-progress"><div class="step-progress-fill" id="step-progress-fill"></div></div>
+      </div>
+
+      <div id="step-body"></div>
+      <div class="step-actions" id="step-actions"></div>
+    </div>
+
+    <aside class="toolkit-panel">
+      <div class="toolkit-header">
+        <div class="toolkit-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+            <path d="M20 7h-3V5a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1z"/>
+            <line x1="3" y1="12" x2="21" y2="12"/>
+          </svg>
+        </div>
+        <div class="toolkit-title">Module 1 Toolkit</div>
+        <div class="toolkit-count" id="toolkit-count">0/8</div>
+      </div>
+      <div id="toolkit-cards-wrap" class="toolkit-cards">
+        <div class="toolkit-empty" id="toolkit-empty">Cards unlock as you complete each step.</div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- FINISH -->
+  <div id="finish-screen" class="screen hidden">
+    <div class="finish-banner">
+      <div class="finish-icon">✓</div>
+      <div class="finish-title">Module 1 Toolkit Complete</div>
+      <div class="finish-sub">Save this reference for your exam, your placement, and your career. Then come back for Module 2.</div>
+    </div>
+
+    <div class="printable-toolkit" id="printable-toolkit"></div>
+
+    <div class="reflection-prompts">
+      <h3>For Your Reflective Tasks</h3>
+      <p>As you move into Module 2, return to this toolkit and ask:</p>
+      <ul>
+        <li>When did my gut answer disagree with my reasoned answer? Why?</li>
+        <li>Which theory (deontology, teleology, virtue ethics) do I lean toward by default?</li>
+        <li>What did the dying patient scenario reveal about my comfort with hard truths?</li>
+      </ul>
+    </div>
+
+    <div class="finish-actions">
+      <button class="btn btn-sage" onclick="window.print()">Print or Save as PDF</button>
+      <button class="btn btn-ghost" onclick="restart()">Start Again</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ============== STEPS DATA ==============
+const steps = [
+  // STEP 1: Sort items into Law / Ethics / Both
+  {
+    tag: 'STEP 1 OF 8 — FOUNDATIONS',
+    title: 'Law vs Ethics',
+    typeTag: 'SORT',
+    type: 'bucket_sort',
+    activity: {
+      prompt: 'Law and ethics are related but distinct. Sort each statement into the correct bucket. <strong>Tap an item, then tap a bucket.</strong>',
+      items: [
+        { text: 'Enforceable by courts and the state', correct: 'law' },
+        { text: 'Defines minimum acceptable behaviour', correct: 'law' },
+        { text: 'Changes through legislation and case law', correct: 'law' },
+        { text: 'Guided by moral reasoning and principles', correct: 'ethics' },
+        { text: 'Asks what we should do, not just what we must', correct: 'ethics' },
+        { text: 'Can require more of us than the law does', correct: 'ethics' },
+        { text: 'Aims to protect patients from harm', correct: 'both' },
+        { text: 'Shapes nursing professional standards', correct: 'both' },
+        { text: 'Can sometimes come into conflict with each other', correct: 'both' }
+      ],
+      buckets: [
+        { id: 'law', name: 'Law', sub: 'What you must do' },
+        { id: 'ethics', name: 'Ethics', sub: 'What you should do' },
+        { id: 'both', name: 'Both', sub: 'Where they overlap' }
+      ]
+    },
+    toolkit: {
+      tag: 'FOUNDATIONS',
+      title: 'Law vs Ethics',
+      text: 'Law is what you must do (enforceable). Ethics is what you should do (moral reasoning). They overlap when both aim to protect patients, but ethics often requires more than the law demands.'
+    }
+  },
+
+  // STEP 2: Pick the wrong statement
+  {
+    tag: 'STEP 2 OF 8 — CLARITY',
+    title: 'What ethics is not',
+    typeTag: 'SPOT THE FAKE',
+    type: 'pick_wrong',
+    activity: {
+      prompt: 'Three statements about ethics are correct. <strong>One is not.</strong> Find the misconception.',
+      statements: [
+        { text: 'Ethics requires formal decision making processes for issues that call for moral judgement.', correct: true },
+        { text: 'Ethics is essentially about whatever feels morally right to you personally.', correct: false, why: 'This is the misconception. Ethics is <strong>not personal moral values</strong>. It\'s a formal, critical process for evaluating decisions, separate from gut feeling. The whole point of studying ethics is to <strong>step outside</strong> your personal feelings and reason through dilemmas systematically.' },
+        { text: 'Ethics involves finding reasons that support one decision over another.', correct: true },
+        { text: 'Ethics helps us apply consistent reasoning across different future situations.', correct: true }
+      ]
+    },
+    toolkit: {
+      tag: 'CLARIFICATION',
+      title: 'What Ethics Is Not',
+      text: 'Not personal moral values. Ethics is a formal, structured process of evaluating decisions and reasoning consistently across situations.'
+    }
+  },
+
+  // STEP 3: Branching scenario - the dying patient (Case Study 2.1)
+  {
+    tag: 'STEP 3 OF 8 — APPLIED',
+    title: 'The dying patient',
+    typeTag: 'SCENARIO',
+    type: 'scenario',
+    activity: {
+      tag: 'CASE STUDY 2.1',
+      text: 'You are caring for Mr Davies, a 68 year old man with advanced lung cancer. The medical team has decided not to inform him of his terminal prognosis at the request of his family. During your shift, Mr Davies looks at you directly and asks, <em>"Be honest with me, am I dying?"</em>',
+      question: 'What\'s the most ethically defensible response?',
+      options: [
+        { text: "Tell him 'I think you need to discuss this with the doctor' and leave the room.",
+          why: "Deflection. You haven't lied, but you also haven't honoured his question. This treats his dignity as someone else's problem. <strong>Acknowledging without delivering full prognosis</strong> is a better path." },
+        { text: "Acknowledge his question, sit down, and say something like 'I can see you're asking a hard question. Tell me what you've noticed about how you're feeling.' Then commit to ensuring the doctor speaks with him today.",
+          best: true,
+          why: "This is the ethically robust response. You've honoured <strong>autonomy</strong> (his right to information), <strong>honesty</strong> (no deflection or lie), and <strong>your scope of practice</strong> (the doctor delivers prognosis, but you ensure the conversation happens). You've also given him space to be heard." },
+        { text: "Reassure him: 'Don't worry, we're doing everything we can. You just focus on resting.'",
+          why: "This is a paternalistic lie of omission. It denies him information about his own life. It also breaches the principle of <strong>honesty</strong>. The family's request cannot override the patient's right to know." },
+        { text: "Tell him directly that yes, he is dying.",
+          why: "Honest, but outside your scope of practice. Prognosis delivery is a medical conversation. You can support honesty without being the one who delivers the news. <strong>Coordinate the right conversation rather than going alone.</strong>" }
+      ]
+    },
+    toolkit: {
+      tag: 'CASE STUDY 2.1',
+      title: 'The Dying Patient',
+      text: 'When a patient asks if they\'re dying, acknowledge the question, listen, and ensure the medical team has the conversation. Don\'t lie, deflect, or step beyond your scope.'
+    }
+  },
+
+  // STEP 4: Fill the blank - good ethics needs good data
+  {
+    tag: 'STEP 4 OF 8 — METHOD',
+    title: '"Good ethics must be grounded in good data"',
+    typeTag: 'FILL THE BLANKS',
+    type: 'fill_blank',
+    activity: {
+      sentences: [
+        { template: 'Ethical decisions can\'t be made in a [BLANK1]. Without accurate clinical and contextual information, you\'re reasoning from [BLANK2].', answers: { BLANK1: 'vacuum', BLANK2: 'assumption' } },
+        { template: '"Good ethics must be grounded in good data" means we need the [BLANK3], the patient\'s [BLANK4] and values, and an accurate understanding of [BLANK5] before applying ethical reasoning.', answers: { BLANK3: 'facts', BLANK4: 'preferences', BLANK5: 'consequences' } }
+      ],
+      bank: ['vacuum', 'assumption', 'facts', 'preferences', 'consequences', 'hospital', 'rumour', 'rules', 'feelings']
+    },
+    toolkit: {
+      tag: 'METHOD',
+      title: 'Good Ethics, Good Data',
+      text: 'Ethics doesn\'t happen in a vacuum. Before applying ethical reasoning, gather the facts, the patient\'s preferences and values, and an accurate picture of consequences. Reasoning from assumption produces unethical answers.'
+    }
+  },
+
+  // STEP 5: Two column sort - deontological vs teleological
+  {
+    tag: 'STEP 5 OF 8 — THEORIES',
+    title: 'Deontology vs Teleology',
+    typeTag: 'TWO COLUMN SORT',
+    type: 'two_col_sort',
+    activity: {
+      prompt: '<strong>Deontological</strong> theories focus on duties and rules. <strong>Teleological</strong> theories focus on outcomes and consequences. Tap each statement, then tap a column.',
+      items: [
+        { text: 'Some actions are right or wrong in themselves', correct: 'deon' },
+        { text: 'Judges actions by the good they produce', correct: 'tele' },
+        { text: 'Lying is wrong even to save a life', correct: 'deon' },
+        { text: 'Utilitarianism is its main form', correct: 'tele' },
+        { text: 'Greatest good for the greatest number', correct: 'tele' },
+        { text: 'Kant\'s categorical imperative belongs here', correct: 'deon' },
+        { text: 'Focuses on duty, not consequence', correct: 'deon' },
+        { text: 'Willing to make trade offs for net benefit', correct: 'tele' }
+      ],
+      cols: [
+        { id: 'deon', name: 'Deontological', tagline: 'Duty and rules first' },
+        { id: 'tele', name: 'Teleological', tagline: 'Outcomes and consequences' }
+      ]
+    },
+    toolkit: {
+      tag: 'TWO BIG THEORIES',
+      title: 'Deontology vs Teleology',
+      text: 'Deontological theories (Kant) focus on duties and rules, some actions are right or wrong in themselves. Teleological theories (utilitarianism) focus on outcomes, judging actions by the good they produce.'
+    }
+  },
+
+  // STEP 6: Match the four bioethical principles to clinical examples
+  {
+    tag: 'STEP 6 OF 8 — PRINCIPLES',
+    title: 'The four bioethical principles',
+    typeTag: 'MATCH',
+    type: 'match',
+    activity: {
+      prompt: 'Match each of the four major bioethical principles to a clinical example. Tap a principle, then tap its example.',
+      principles: [
+        { id: 'autonomy', name: 'Autonomy' },
+        { id: 'beneficence', name: 'Beneficence' },
+        { id: 'nonmaleficence', name: 'Non maleficence' },
+        { id: 'justice', name: 'Justice' }
+      ],
+      examples: [
+        { id: 'autonomy', text: 'Respecting a competent patient\'s refusal of blood transfusion on religious grounds' },
+        { id: 'beneficence', text: 'Going beyond minimum care to comfort a frightened paediatric patient' },
+        { id: 'nonmaleficence', text: 'Refusing to perform a procedure you haven\'t been trained for' },
+        { id: 'justice', text: 'Triaging based on clinical need, not on who arrived first or who is most vocal' }
+      ]
+    },
+    toolkit: {
+      tag: 'BIOETHICAL PRINCIPLES',
+      title: 'The Four Principles',
+      text: 'Autonomy (respect patient choice) • Beneficence (do good) • Non maleficence (do no harm) • Justice (fairness). These four anchor most bioethical reasoning.'
+    }
+  },
+
+  // STEP 7: Mini Game - Moral Compass
+  {
+    tag: 'STEP 7 OF 8 — MINI GAME',
+    title: 'The Moral Compass',
+    typeTag: 'GAME',
+    type: 'compass_game',
+    activity: {
+      intro: 'Four real life dilemmas. Drag the compass needle to where you stand on each one, from "Never" to "Always". Then see what your gut tells you about your default ethical theory.',
+      questions: [
+        {
+          q: 'When is it acceptable to lie?',
+          leftLabel: 'Never',
+          rightLabel: 'When it produces good',
+          deonTendency: 'left', // closer to left = deon
+          teleTendency: 'right',
+          virtueZone: [40, 60],
+          analysis: 'If you landed close to "Never", you lean <strong>deontological</strong>, lying is wrong in itself. If you landed close to "When it produces good", you lean <strong>teleological</strong>, judging by consequences. If you landed in the middle, you may be reasoning through <strong>virtue ethics</strong>, asking what a person of good character would do.'
+        },
+        {
+          q: 'You find $1000 in a bag in a car park. What would you do?',
+          leftLabel: 'Hand it in',
+          rightLabel: 'Keep it',
+          deonTendency: 'left',
+          teleTendency: 'right',
+          virtueZone: [30, 50],
+          analysis: 'Handing it in reflects a <strong>duty</strong> (deontological) and likely also <strong>virtue</strong> (honesty as a character trait). Keeping it might be justified by a teleological lens (it does more good in your pocket than in a bag) but most ethical frameworks would resist this.'
+        },
+        {
+          q: 'You make a clinical error that harmed a patient. What do you do?',
+          leftLabel: 'Disclose fully',
+          rightLabel: 'Stay quiet',
+          deonTendency: 'left',
+          teleTendency: 'right',
+          virtueZone: [0, 30],
+          analysis: 'This is where law, ethics, and self preservation collide. <strong>Open disclosure</strong> is both a legal duty and an ethical one, even when it\'s personally costly. Staying quiet might feel like it produces less immediate harm, but it breaches honesty, accountability, and patient trust.'
+        },
+        {
+          q: 'Would you take demerit points for a family member?',
+          leftLabel: 'Yes, family first',
+          rightLabel: 'No, take responsibility',
+          deonTendency: 'right',
+          teleTendency: 'left',
+          virtueZone: [40, 70],
+          analysis: 'Interesting one. Taking points for family is <strong>illegal</strong> but might feel ethically defensible to some (relational loyalty, family good). Refusing reflects respect for the law and individual accountability. There\'s no single right answer here, which is exactly why it\'s worth examining.'
+        }
+      ]
+    },
+    toolkit: {
+      tag: 'GUT CHECK',
+      title: 'Your Moral Compass',
+      text: 'Your gut reactions reveal your default ethical lens. Knowing whether you lean deontological, teleological, or virtue based helps you recognise when you\'re reasoning from theory and when you\'re reasoning from habit.'
+    }
+  },
+
+  // STEP 8: Order the Kerridge model steps
+  {
+    tag: 'STEP 8 OF 8 — DECISION MODEL',
+    title: 'The Kerridge model',
+    typeTag: 'ORDER',
+    type: 'order',
+    activity: {
+      prompt: 'Kerridge, Lowe and McPhee\'s ethical decision making model has six steps. Put them in the right order using the up and down arrows.',
+      items: [
+        { id: 'step1', text: 'Clearly state the problem or dilemma', correctPos: 0 },
+        { id: 'step2', text: 'Get the facts (clinical, social, legal, contextual)', correctPos: 1 },
+        { id: 'step3', text: 'Consider the ethical principles involved', correctPos: 2 },
+        { id: 'step4', text: 'Consider how the problem would look from other perspectives', correctPos: 3 },
+        { id: 'step5', text: 'Identify the available options and weigh them', correctPos: 4 },
+        { id: 'step6', text: 'Choose an option, act, and evaluate the outcome', correctPos: 5 }
+      ]
+    },
+    toolkit: {
+      tag: 'DECISION MODEL',
+      title: 'Kerridge, Lowe and McPhee',
+      text: 'Six step ethical decision making framework: 1) State the problem, 2) Get the facts, 3) Consider principles, 4) Consider other perspectives, 5) Identify and weigh options, 6) Choose, act, and evaluate.'
+    }
+  }
+];
+
+// ============== STATE ==============
+let currentStep = 0;
+let unlockedToolkit = [];
+
+function updateProgress() {
+  document.getElementById('progress-pill').textContent = `${unlockedToolkit.length} of 8`;
+  document.getElementById('toolkit-count').textContent = `${unlockedToolkit.length}/8`;
+}
+
+function startStep(idx) {
+  currentStep = idx;
+  document.getElementById('intro-screen').classList.add('hidden');
+  document.getElementById('activity-layout').classList.remove('hidden');
+  document.getElementById('finish-screen').classList.add('hidden');
+  renderStep();
+  renderToolkit();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function renderStep() {
+  const step = steps[currentStep];
+  document.getElementById('step-num').textContent = currentStep + 1;
+  document.getElementById('step-tag').textContent = step.tag;
+  document.getElementById('step-title').textContent = step.title;
+  const tagEl = document.getElementById('step-type-tag');
+  tagEl.textContent = step.typeTag;
+  tagEl.classList.toggle('game', step.type === 'compass_game');
+  document.getElementById('step-progress-fill').style.width = (currentStep / 8 * 100) + '%';
+
+  document.getElementById('step-body').innerHTML = '';
+  document.getElementById('step-actions').innerHTML = '';
+
+  if (step.type === 'bucket_sort') renderBucketSort(step.activity);
+  else if (step.type === 'pick_wrong') renderPickWrong(step.activity);
+  else if (step.type === 'scenario') renderScenario(step.activity);
+  else if (step.type === 'fill_blank') renderFillBlank(step.activity);
+  else if (step.type === 'two_col_sort') renderTwoColSort(step.activity);
+  else if (step.type === 'match') renderMatch(step.activity);
+  else if (step.type === 'compass_game') renderCompassGame(step.activity);
+  else if (step.type === 'order') renderOrder(step.activity);
+}
+
+// ============== ACTIVITY: BUCKET SORT ==============
+let bucketState = { placed: {}, selected: null };
+
+function renderBucketSort(act) {
+  bucketState = { placed: {}, selected: null };
+  const body = document.getElementById('step-body');
+  body.innerHTML = `
+    <div class="step-prompt">${act.prompt}</div>
+    <div class="sort-pool">
+      <div class="sort-pool-label">Items to sort</div>
+      <div class="sort-pool-items" id="sort-pool-items"></div>
+    </div>
+    <div class="sort-buckets-area" id="sort-buckets-area"></div>
+  `;
+
+  const poolEl = document.getElementById('sort-pool-items');
+  const shuffled = [...act.items].map((item, i) => ({ ...item, idx: i })).sort(() => Math.random() - 0.5);
+  shuffled.forEach(item => {
+    const el = document.createElement('div');
+    el.className = 'sort-item';
+    el.textContent = item.text;
+    el.dataset.idx = item.idx;
+    el.dataset.correct = item.correct;
+    el.onclick = () => selectSortItem(el);
+    poolEl.appendChild(el);
+  });
+
+  const bucketsEl = document.getElementById('sort-buckets-area');
+  act.buckets.forEach(b => {
+    const bucket = document.createElement('div');
+    bucket.className = `sort-bucket ${b.id}`;
+    bucket.dataset.id = b.id;
+    bucket.innerHTML = `
+      <div class="sort-bucket-header">${b.name}</div>
+      <div class="sort-bucket-sub">${b.sub}</div>
+      <div class="sort-bucket-items" data-bucket="${b.id}"></div>
+    `;
+    bucket.onclick = () => placeBucketItem(b.id, act);
+    bucketsEl.appendChild(bucket);
+  });
+}
+
+function selectSortItem(el) {
+  if (el.classList.contains('used')) return;
+  document.querySelectorAll('.sort-item').forEach(s => s.classList.remove('selected'));
+  el.classList.add('selected');
+  bucketState.selected = el;
+}
+
+function placeBucketItem(bucketId, act) {
+  if (!bucketState.selected) return;
+  const item = bucketState.selected;
+  const correct = item.dataset.correct === bucketId;
+
+  const placed = document.createElement('div');
+  placed.className = 'sort-bucket-item-placed ' + (correct ? 'correct' : 'wrong');
+  placed.textContent = item.textContent + (correct ? ' ✓' : ' ✗');
+  document.querySelector(`[data-bucket="${bucketId}"]`).appendChild(placed);
+
+  item.classList.remove('selected');
+  item.classList.add('used');
+  bucketState.placed[item.dataset.idx] = { bucketId, correct };
+  bucketState.selected = null;
+
+  if (Object.keys(bucketState.placed).length === act.items.length) {
+    const totalCorrect = Object.values(bucketState.placed).filter(p => p.correct).length;
+    if (totalCorrect === act.items.length) {
+      showFeedback('correct', 'All sorted correctly', 'Law sets the floor (what you must do). Ethics asks what you should do, often demanding more. They overlap when both protect patients but they can also pull apart, which is when ethical reasoning matters most.');
+    } else {
+      showFeedback('error', `${totalCorrect} of ${act.items.length} correct`, 'Some items are in the wrong bucket. The key idea is that <strong>law is enforceable, ethics is reasoned</strong>. The "both" category captures things that exist in both spheres, like the duty to protect patients. Move on when you\'re ready.');
+    }
+    completeStep();
+  }
+}
+
+// ============== ACTIVITY: PICK WRONG STATEMENT ==============
+function renderPickWrong(act) {
+  const body = document.getElementById('step-body');
+  body.innerHTML = `
+    <div class="step-prompt">${act.prompt}</div>
+    <div class="statement-list" id="statement-list"></div>
+  `;
+  const list = document.getElementById('statement-list');
+  const letters = ['A', 'B', 'C', 'D'];
+  const shuffled = [...act.statements].sort(() => Math.random() - 0.5);
+
+  shuffled.forEach((s, i) => {
+    const el = document.createElement('div');
+    el.className = 'statement';
+    el.innerHTML = `<span class="statement-letter">${letters[i]}</span><span>${s.text}</span>`;
+    el.onclick = () => {
+      document.querySelectorAll('.statement').forEach(st => {
+        st.classList.add('disabled');
+        const matched = shuffled.find(opt => opt.text === st.querySelector('span:last-child').textContent);
+        if (!matched.correct) st.classList.add('correct');
+      });
+      if (!s.correct) {
+        showFeedback('correct', 'Spot on', s.why);
+      } else {
+        el.classList.add('wrong-pick');
+        const wrong = shuffled.find(opt => !opt.correct);
+        showFeedback('error', 'Not this one', `That statement is correct. The false statement was the one claiming ethics is about personal feelings. ${wrong.why}`);
+      }
+      completeStep();
+    };
+    list.appendChild(el);
+  });
+}
+
+// ============== ACTIVITY: BRANCHING SCENARIO ==============
+function renderScenario(act) {
+  const body = document.getElementById('step-body');
+  body.innerHTML = `
+    <div class="scenario-panel">
+      <div class="scenario-tag">${act.tag}</div>
+      <div class="scenario-text">${act.text}</div>
+      <div class="scenario-question">${act.question}</div>
+      <div class="scenario-options" id="scenario-options"></div>
+    </div>
+  `;
+  const opts = document.getElementById('scenario-options');
+  const shuffled = [...act.options].sort(() => Math.random() - 0.5);
+  shuffled.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'scenario-option';
+    btn.textContent = opt.text;
+    btn.onclick = () => {
+      document.querySelectorAll('.scenario-option').forEach(el => {
+        el.disabled = true;
+        if (el === btn) el.classList.add('chosen');
+        else el.classList.add('faded');
+      });
+      if (opt.best) {
+        showFeedback('correct', 'Most defensible', opt.why);
+      } else {
+        showFeedback('error', 'Not the strongest choice', opt.why + ' <br><br>The most defensible response acknowledges the question, supports the patient, and ensures the medical team follows up appropriately.');
+      }
+      completeStep();
+    };
+    opts.appendChild(btn);
+  });
+}
+
+// ============== ACTIVITY: FILL THE BLANK ==============
+let fillState = { filled: {} };
+
+function renderFillBlank(act) {
+  fillState = { filled: {} };
+  const body = document.getElementById('step-body');
+
+  let html = '<div class="step-prompt">Drag the right words from the bank into each blank. Tap a filled blank to remove the word.</div><div class="fill-text">';
+  act.sentences.forEach(s => {
+    let t = s.template;
+    Object.keys(s.answers).forEach(b => {
+      t = t.replace(`[${b}]`, `<span class="blank" data-blank="${b}">____</span>`);
+    });
+    html += `<p>${t}</p>`;
+  });
+  html += '</div><div class="word-bank" id="word-bank"></div>';
+  body.innerHTML = html;
+
+  const bank = document.getElementById('word-bank');
+  const shuffled = [...act.bank].sort(() => Math.random() - 0.5);
+  shuffled.forEach(word => {
+    const chip = document.createElement('div');
+    chip.className = 'word-chip';
+    chip.textContent = word;
+    chip.dataset.word = word;
+    chip.onclick = () => pickWord(word, chip);
+    bank.appendChild(chip);
+  });
+
+  document.querySelectorAll('.blank').forEach(b => {
+    b.onclick = () => {
+      if (b.classList.contains('filled')) {
+        const w = b.dataset.filledWord;
+        b.classList.remove('filled');
+        b.textContent = '____';
+        delete b.dataset.filledWord;
+        delete fillState.filled[b.dataset.blank];
+        document.querySelector(`.word-chip[data-word="${w}"]`)?.classList.remove('used');
+      }
+    };
+  });
+}
+
+function pickWord(word, chip) {
+  if (chip.classList.contains('used')) return;
+  const blanks = document.querySelectorAll('.blank');
+  for (const b of blanks) {
+    if (!b.classList.contains('filled')) {
+      b.classList.add('filled');
+      b.textContent = word;
+      b.dataset.filledWord = word;
+      fillState.filled[b.dataset.blank] = word;
+      chip.classList.add('used');
+      break;
+    }
+  }
+  const allFilled = document.querySelectorAll('.blank').length === Object.keys(fillState.filled).length;
+  if (allFilled) {
+    document.getElementById('step-actions').innerHTML = `<button class="btn" onclick="checkFill()">Check My Answer</button>`;
+  }
+}
+
+function checkFill() {
+  const act = steps[currentStep].activity;
+  const correctAnswers = {};
+  act.sentences.forEach(s => Object.assign(correctAnswers, s.answers));
+  let allCorrect = true;
+  const wrong = [];
+  for (const blank in correctAnswers) {
+    if (fillState.filled[blank] !== correctAnswers[blank]) {
+      allCorrect = false;
+      wrong.push(`<strong>${correctAnswers[blank]}</strong>`);
+    }
+  }
+  if (allCorrect) {
+    showFeedback('correct', 'All right', 'You\'ve captured why data matters in ethics. The phrase <strong>"good ethics needs good data"</strong> reminds us that ethical principles only work when applied to accurate information. Misdiagnosis or misunderstood patient values leads to ethical errors even with good intentions.');
+  } else {
+    showFeedback('error', 'Not quite', `Some words are misplaced. The correct words for the blanks were: ${wrong.join(', ')}. The phrase <strong>"good ethics needs good data"</strong> reminds us that ethical principles only work when applied to accurate information. Move on when you\'re ready.`);
+  }
+  completeStep();
+}
+
+// ============== ACTIVITY: TWO COL SORT ==============
+let twoColState = { placed: {}, selected: null };
+
+function renderTwoColSort(act) {
+  twoColState = { placed: {}, selected: null };
+  const body = document.getElementById('step-body');
+  body.innerHTML = `
+    <div class="step-prompt">${act.prompt}</div>
+    <div class="sort-pool">
+      <div class="sort-pool-label">Statements to sort</div>
+      <div class="sort-pool-items" id="two-col-pool"></div>
+    </div>
+    <div class="two-col-sort" id="two-col-area"></div>
+  `;
+
+  const pool = document.getElementById('two-col-pool');
+  const shuffled = [...act.items].map((item, i) => ({ ...item, idx: i })).sort(() => Math.random() - 0.5);
+  shuffled.forEach(item => {
+    const el = document.createElement('div');
+    el.className = 'sort-item';
+    el.textContent = item.text;
+    el.dataset.idx = item.idx;
+    el.dataset.correct = item.correct;
+    el.onclick = () => selectTwoColItem(el);
+    pool.appendChild(el);
+  });
+
+  const area = document.getElementById('two-col-area');
+  act.cols.forEach(c => {
+    const col = document.createElement('div');
+    col.className = `col-bucket ${c.id}`;
+    col.dataset.id = c.id;
+    col.innerHTML = `
+      <div class="col-bucket-name">${c.name}</div>
+      <div class="col-bucket-tagline">${c.tagline}</div>
+      <div class="col-bucket-items" data-bucket="${c.id}"></div>
+    `;
+    col.onclick = () => placeTwoColItem(c.id, act);
+    area.appendChild(col);
+  });
+}
+
+function selectTwoColItem(el) {
+  if (el.classList.contains('used')) return;
+  document.querySelectorAll('.sort-item').forEach(s => s.classList.remove('selected'));
+  el.classList.add('selected');
+  twoColState.selected = el;
+}
+
+function placeTwoColItem(bucketId, act) {
+  if (!twoColState.selected) return;
+  const item = twoColState.selected;
+  const correct = item.dataset.correct === bucketId;
+  const placed = document.createElement('div');
+  placed.className = 'sort-bucket-item-placed ' + (correct ? 'correct' : 'wrong');
+  placed.textContent = item.textContent + (correct ? ' ✓' : ' ✗');
+  document.querySelector(`.col-bucket-items[data-bucket="${bucketId}"]`).appendChild(placed);
+  item.classList.remove('selected');
+  item.classList.add('used');
+  twoColState.placed[item.dataset.idx] = correct;
+  twoColState.selected = null;
+
+  if (Object.keys(twoColState.placed).length === act.items.length) {
+    const correctCount = Object.values(twoColState.placed).filter(v => v).length;
+    if (correctCount === act.items.length) {
+      showFeedback('correct', 'All sorted', '<strong>Deontology</strong> (from Greek "deon", duty) says some acts are intrinsically right or wrong. <strong>Teleology</strong> (from "telos", end or goal) judges acts by their consequences. These are the two big families of normative ethical theory.');
+    } else {
+      showFeedback('error', `${correctCount} of ${act.items.length} correct`, 'A few items ended up in the wrong column. Remember, <strong>deontology</strong> = duty based. <strong>Teleology</strong> = outcome based. Phrases like "in itself", "duty", and "rules" point to deontology. Phrases like "greatest good", "consequences", and "outcomes" point to teleology. Move on when you\'re ready.');
+    }
+    completeStep();
+  }
+}
+
+// ============== ACTIVITY: MATCH ==============
+let matchState = { selectedPrinciple: null, matched: {}, wrongAttempts: 0 };
+
+function renderMatch(act) {
+  matchState = { selectedPrinciple: null, matched: {}, wrongAttempts: 0 };
+  const body = document.getElementById('step-body');
+  body.innerHTML = `
+    <div class="step-prompt">${act.prompt}</div>
+    <div class="match-area">
+      <div>
+        <div class="match-column-title">Principle</div>
+        <div class="match-list" id="principle-list"></div>
+      </div>
+      <div>
+        <div class="match-column-title">Clinical Example</div>
+        <div class="match-list" id="example-list"></div>
+      </div>
+    </div>
+  `;
+
+  const pList = document.getElementById('principle-list');
+  [...act.principles].sort(() => Math.random() - 0.5).forEach(p => {
+    const el = document.createElement('div');
+    el.className = 'match-item principle';
+    el.dataset.id = p.id;
+    el.textContent = p.name;
+    el.onclick = () => selectPrinciple(p.id, el);
+    pList.appendChild(el);
+  });
+
+  const eList = document.getElementById('example-list');
+  [...act.examples].sort(() => Math.random() - 0.5).forEach(ex => {
+    const el = document.createElement('div');
+    el.className = 'match-item';
+    el.dataset.id = ex.id;
+    el.textContent = ex.text;
+    el.onclick = () => tryMatchPrinciple(ex.id, el, act);
+    eList.appendChild(el);
+  });
+}
+
+function selectPrinciple(id, el) {
+  if (el.classList.contains('matched')) return;
+  document.querySelectorAll('.match-item.principle').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+  matchState.selectedPrinciple = id;
+}
+
+function tryMatchPrinciple(id, el, act) {
+  if (el.classList.contains('matched') || !matchState.selectedPrinciple) return;
+  if (matchState.selectedPrinciple === id) {
+    el.classList.add('matched');
+    document.querySelector(`.match-item.principle[data-id="${id}"]`).classList.add('matched');
+    document.querySelector(`.match-item.principle[data-id="${id}"]`).classList.remove('selected');
+    matchState.matched[id] = true;
+    matchState.selectedPrinciple = null;
+    if (Object.keys(matchState.matched).length === act.principles.length) {
+      showFeedback('correct', 'All matched', 'These four principles, <strong>autonomy, beneficence, non maleficence, and justice</strong>, are the foundation of bioethical reasoning. Most clinical dilemmas can be analysed by identifying which of these four are in tension and how to weigh them.');
+      completeStep();
+    }
+  } else {
+    el.style.animation = 'slideIn 0.4s ease';
+    setTimeout(() => el.style.animation = '', 400);
+    document.querySelector(`.match-item.principle[data-id="${matchState.selectedPrinciple}"]`).classList.remove('selected');
+    matchState.selectedPrinciple = null;
+    matchState.wrongAttempts++;
+    if (matchState.wrongAttempts >= 2 && !document.getElementById('match-skip-btn')) {
+      document.getElementById('step-actions').innerHTML = `<button class="btn btn-ghost" id="match-skip-btn" onclick="skipMatch()">Show me the answers</button>`;
+    }
+  }
+}
+
+function skipMatch() {
+  const act = steps[currentStep].activity;
+  // Auto match all remaining
+  act.principles.forEach(p => {
+    if (matchState.matched[p.id]) return;
+    const ex = act.examples.find(e => e.id === p.id);
+    const pEl = document.querySelector(`.match-item.principle[data-id="${p.id}"]`);
+    const eEl = Array.from(document.querySelectorAll('#example-list .match-item')).find(el => el.textContent === ex.text);
+    if (pEl) pEl.classList.add('matched');
+    if (eEl) eEl.classList.add('matched');
+    matchState.matched[p.id] = true;
+  });
+  showFeedback('error', 'Here are the matches', 'The four bioethical principles are: <strong>Autonomy</strong> (respecting patient choice), <strong>Beneficence</strong> (doing good), <strong>Non maleficence</strong> (doing no harm), and <strong>Justice</strong> (fairness). Each one shows up across nearly every clinical dilemma you\'ll face.');
+  completeStep();
+}
+
+// ============== ACTIVITY: MORAL COMPASS GAME ==============
+let compassState = { qIdx: 0, answers: [] };
+
+function renderCompassGame(act) {
+  compassState = { qIdx: 0, answers: [] };
+  showCompassQuestion(act);
+}
+
+function showCompassQuestion(act) {
+  const body = document.getElementById('step-body');
+  if (compassState.qIdx >= act.questions.length) {
+    // Done
+    body.innerHTML = `
+      <div class="step-prompt">You\'ve answered all four moral compass questions.</div>
+      <div class="compass-feedback">
+        <div class="compass-feedback-tag">// Your Compass Reading</div>
+        <div class="compass-feedback-text">
+          ${getCompassSummary()}
+        </div>
+      </div>
+    `;
+    completeStep();
+    return;
+  }
+
+  const q = act.questions[compassState.qIdx];
+  body.innerHTML = `
+    <div class="step-prompt">${compassState.qIdx === 0 ? act.intro : ''}</div>
+    <div class="compass-game">
+      <div class="compass-q-counter">QUESTION ${compassState.qIdx + 1} OF ${act.questions.length}</div>
+      <div class="compass-q-title">${q.q}</div>
+      <div class="compass-dial-wrap">
+        <div class="compass-dial" id="compass-dial">
+          <svg viewBox="0 0 200 200" id="compass-svg">
+            <defs>
+              <radialGradient id="compass-grad">
+                <stop offset="0%" stop-color="#fbe3da"/>
+                <stop offset="100%" stop-color="#fff"/>
+              </radialGradient>
+            </defs>
+            <circle cx="100" cy="100" r="90" fill="url(#compass-grad)" stroke="#e8836a" stroke-width="2"/>
+            <circle cx="100" cy="100" r="80" fill="none" stroke="#e8836a" stroke-width="0.5" stroke-dasharray="2 4" opacity="0.6"/>
+
+            <!-- Zone markers -->
+            <text x="20" y="105" font-family="JetBrains Mono, monospace" font-size="8" fill="#c97b9a" font-weight="700">←</text>
+            <text x="178" y="105" font-family="JetBrains Mono, monospace" font-size="8" fill="#6b8e7f" font-weight="700">→</text>
+
+            <!-- Sweep arc -->
+            <path d="M 30 100 A 70 70 0 0 1 170 100" fill="none" stroke="#2b2a26" stroke-width="2"/>
+
+            <!-- Needle -->
+            <g id="compass-needle" transform="translate(100, 100) rotate(0)">
+              <line x1="0" y1="0" x2="0" y2="-65" stroke="#e8836a" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="0" cy="-65" r="6" fill="#e8836a"/>
+              <line x1="0" y1="0" x2="0" y2="20" stroke="#2b2a26" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="0" cy="0" r="5" fill="#2b2a26"/>
+            </g>
+
+            <!-- Pivot dot -->
+            <circle cx="100" cy="100" r="3" fill="#fff"/>
+          </svg>
+        </div>
+      </div>
+      <div class="compass-labels">
+        <span class="compass-label-left">${q.leftLabel}</span>
+        <span style="color: var(--muted);">Middle</span>
+        <span class="compass-label-right">${q.rightLabel}</span>
+      </div>
+      <div class="compass-reading">
+        <div class="compass-reading-val" id="compass-val">50</div>
+        <div class="compass-reading-label">Your position (0 = ${q.leftLabel}, 100 = ${q.rightLabel})</div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('step-actions').innerHTML = `<button class="btn" onclick="submitCompass()">Lock in My Answer</button>`;
+
+  // Set up dragging
+  setupCompassDial();
+}
+
+function setupCompassDial() {
+  const dial = document.getElementById('compass-dial');
+  const needle = document.getElementById('compass-needle');
+  const valEl = document.getElementById('compass-val');
+  let dragging = false;
+  let currentValue = 50;
+
+  function updateNeedle(value) {
+    currentValue = Math.max(0, Math.min(100, value));
+    // Map 0-100 to -90 to +90 degrees
+    const angle = -90 + (currentValue / 100) * 180;
+    needle.setAttribute('transform', `translate(100, 100) rotate(${angle})`);
+    valEl.textContent = Math.round(currentValue);
+  }
+
+  updateNeedle(50);
+
+  function handleMove(clientX) {
+    const rect = dial.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const value = (x / rect.width) * 100;
+    updateNeedle(value);
+  }
+
+  dial.addEventListener('mousedown', (e) => {
+    dragging = true;
+    dial.classList.add('dragging');
+    handleMove(e.clientX);
+    e.preventDefault();
+  });
+  window.addEventListener('mousemove', (e) => {
+    if (dragging) handleMove(e.clientX);
+  });
+  window.addEventListener('mouseup', () => {
+    dragging = false;
+    dial.classList.remove('dragging');
+  });
+
+  dial.addEventListener('touchstart', (e) => {
+    dragging = true;
+    dial.classList.add('dragging');
+    handleMove(e.touches[0].clientX);
+    e.preventDefault();
+  }, { passive: false });
+  window.addEventListener('touchmove', (e) => {
+    if (dragging) {
+      handleMove(e.touches[0].clientX);
+      e.preventDefault();
+    }
+  }, { passive: false });
+  window.addEventListener('touchend', () => {
+    dragging = false;
+    dial.classList.remove('dragging');
+  });
+
+  dial.addEventListener('click', (e) => {
+    if (!dragging) handleMove(e.clientX);
+  });
+
+  // Store value getter for submitCompass
+  window.__compassValue = () => currentValue;
+}
+
+function submitCompass() {
+  const act = steps[currentStep].activity;
+  const q = act.questions[compassState.qIdx];
+  const value = window.__compassValue();
+  compassState.answers.push({ value, question: q });
+
+  const body = document.getElementById('step-body');
+  // Add feedback inline
+  body.innerHTML += `
+    <div class="compass-feedback">
+      <div class="compass-feedback-tag">// What this reveals</div>
+      <div class="compass-feedback-text">${q.analysis}</div>
+    </div>
+  `;
+
+  document.getElementById('step-actions').innerHTML = `<button class="btn" onclick="nextCompassQuestion()">Next Question →</button>`;
+}
+
+function nextCompassQuestion() {
+  compassState.qIdx++;
+  showCompassQuestion(steps[currentStep].activity);
+  window.scrollTo({ top: document.querySelector('.step-header').offsetTop - 20, behavior: 'smooth' });
+}
+
+function getCompassSummary() {
+  // Calculate average position
+  const avg = compassState.answers.reduce((sum, a) => sum + a.value, 0) / compassState.answers.length;
+  const variance = compassState.answers.reduce((sum, a) => sum + Math.pow(a.value - avg, 2), 0) / compassState.answers.length;
+  const inMiddle = compassState.answers.filter(a => a.value >= 30 && a.value <= 70).length;
+
+  let lean = '';
+  if (inMiddle >= 3) {
+    lean = 'You stayed in the middle ground most of the time, which suggests you lean toward <strong>virtue ethics</strong>. You weigh context and character rather than rigid rules or pure outcomes. This serves you well in nuanced clinical situations but can leave you unanchored when decisions need to be quick.';
+  } else if (avg < 40) {
+    lean = 'You consistently leaned toward the "left" side, suggesting a <strong>deontological</strong> tendency. You see some actions as right or wrong regardless of consequences. This is the foundation of professional codes of ethics, but stretch yourself to consider when context might change a duty.';
+  } else if (avg > 60) {
+    lean = 'You consistently leaned toward the "right" side, suggesting a <strong>teleological/utilitarian</strong> tendency. You judge actions by outcomes. This is pragmatic and useful in resource allocation, but watch for situations where the ends might justify means that violate dignity or rights.';
+  } else {
+    lean = 'You moved across the spectrum depending on the question, which suggests you reason <strong>case by case</strong>. That\'s actually how most experienced nurses operate. The risk is inconsistency, the strength is responsiveness to context.';
+  }
+  return `Across four questions, your average position was <strong>${Math.round(avg)}</strong> with significant variance. ${lean} <br><br><em>None of these orientations is wrong, but knowing your default helps you recognise when you\'re reasoning from theory and when you\'re reasoning from habit.</em>`;
+}
+
+// ============== ACTIVITY: ORDER ==============
+let orderState = [];
+
+function renderOrder(act) {
+  orderState = [...act.items].sort(() => Math.random() - 0.5);
+  const body = document.getElementById('step-body');
+  body.innerHTML = `
+    <div class="step-prompt">${act.prompt}</div>
+    <div class="order-list" id="order-list"></div>
+  `;
+  renderOrderList();
+  document.getElementById('step-actions').innerHTML = `<button class="btn" onclick="checkOrder()">Check My Order</button>`;
+}
+
+function renderOrderList() {
+  const list = document.getElementById('order-list');
+  list.innerHTML = '';
+  orderState.forEach((item, i) => {
+    const el = document.createElement('div');
+    el.className = 'order-item';
+    el.innerHTML = `
+      <div class="order-item-num">${i + 1}</div>
+      <div class="order-item-text">${item.text}</div>
+      <div class="order-controls">
+        <div class="order-btn" onclick="moveOrder(${i}, -1)">↑</div>
+        <div class="order-btn" onclick="moveOrder(${i}, 1)">↓</div>
+      </div>
+    `;
+    list.appendChild(el);
+  });
+}
+
+function moveOrder(idx, dir) {
+  const newIdx = idx + dir;
+  if (newIdx < 0 || newIdx >= orderState.length) return;
+  [orderState[idx], orderState[newIdx]] = [orderState[newIdx], orderState[idx]];
+  renderOrderList();
+}
+
+function checkOrder() {
+  const act = steps[currentStep].activity;
+  const correct = orderState.every((item, i) => item.correctPos === i);
+  if (correct) {
+    showFeedback('correct', 'Correct order', 'The <strong>Kerridge, Lowe and McPhee model</strong> takes you through the discipline of ethical decision making. Start by naming the problem, gather facts, identify the principles in play, look at it from other angles, weigh options, then act and evaluate. This is the scaffolding for ethical reasoning under pressure.');
+  } else {
+    // Build the correct order display
+    const correctOrder = [...act.items].sort((a, b) => a.correctPos - b.correctPos);
+    const correctList = correctOrder.map((item, i) => `<strong>${i + 1}.</strong> ${item.text}`).join('<br>');
+    showFeedback('error', 'Not quite', `The model goes in this order:<br><br>${correctList}<br><br>Think of it as a workflow that takes you from "what\'s the problem?" through to "did it work?". Move on when you\'re ready.`);
+  }
+  completeStep();
+}
+
+// ============== FEEDBACK + COMPLETE ==============
+function showFeedback(type, tag, text) {
+  const existing = document.querySelector('.feedback');
+  if (existing) existing.remove();
+  const fb = document.createElement('div');
+  fb.className = 'feedback' + (type === 'error' ? ' error' : '');
+  fb.innerHTML = `<span class="feedback-tag">${tag}</span><div class="feedback-text">${text}</div>`;
+  document.getElementById('step-body').appendChild(fb);
+}
+
+function completeStep() {
+  const step = steps[currentStep];
+  if (!unlockedToolkit.find(c => c.title === step.toolkit.title)) {
+    unlockedToolkit.push(step.toolkit);
+    renderToolkit();
+    showCelebrate();
+  }
+  const actions = document.getElementById('step-actions');
+  actions.innerHTML = currentStep >= steps.length - 1
+    ? `<button class="btn btn-sage" onclick="finish()">See Your Toolkit</button>`
+    : `<button class="btn" onclick="startStep(${currentStep + 1})">Next Step →</button>`;
+  document.getElementById('step-progress-fill').style.width = ((currentStep + 1) / 8 * 100) + '%';
+  updateProgress();
+}
+
+function showCelebrate() {
+  const c = document.createElement('div');
+  c.className = 'celebrate';
+  const msgs = ['Card unlocked', 'Nice work', 'Locked in', 'Got it', 'In the toolkit'];
+  c.innerHTML = msgs[Math.floor(Math.random() * msgs.length)] + ` <span style="font-size: 0.75rem; opacity: 0.85; font-family: 'JetBrains Mono', monospace; display: block; margin-top: 4px;">+1 Toolkit Card</span>`;
+  document.body.appendChild(c);
+  setTimeout(() => c.remove(), 1300);
+}
+
+function renderToolkit() {
+  const wrap = document.getElementById('toolkit-cards-wrap');
+  if (unlockedToolkit.length === 0) {
+    wrap.innerHTML = '<div class="toolkit-empty">Cards unlock as you complete each step.</div>';
+    return;
+  }
+  wrap.innerHTML = '';
+  unlockedToolkit.forEach(card => {
+    const el = document.createElement('div');
+    el.className = 'toolkit-card';
+    el.innerHTML = `
+      <div class="toolkit-card-tag">${card.tag}</div>
+      <div class="toolkit-card-title">${card.title}</div>
+      <div class="toolkit-card-text">${card.text}</div>
+    `;
+    wrap.appendChild(el);
+  });
+}
+
+function finish() {
+  document.getElementById('activity-layout').classList.add('hidden');
+  document.getElementById('finish-screen').classList.remove('hidden');
+
+  const pt = document.getElementById('printable-toolkit');
+  pt.innerHTML = `
+    <div class="printable-header">
+      <div class="printable-header-title">Module 1 Ethics Toolkit</div>
+      <div class="printable-header-sub">NURS2004 • Personal Reference</div>
+    </div>
+    ${unlockedToolkit.map(c => `
+      <div class="printable-section">
+        <div class="printable-section-tag">${c.tag}</div>
+        <div class="printable-section-title">${c.title}</div>
+        <div class="printable-section-text">${c.text}</div>
+      </div>
+    `).join('')}
+  `;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function restart() {
+  currentStep = 0;
+  unlockedToolkit = [];
+  document.getElementById('finish-screen').classList.add('hidden');
+  document.getElementById('intro-screen').classList.remove('hidden');
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+updateProgress();
+</script>
+
+</body>
+</html>
